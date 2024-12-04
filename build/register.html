@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Page</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://mazipan.github.io/login-page-css/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://mazipan.github.io/login-page-css/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://mazipan.github.io/login-page-css/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="https://mazipan.github.io/login-page-css/manifest.json" />
+
+    <meta name="msapplication-TileColor" content="#fdcb04" />
+    <meta name="theme-color" content="#fdcb04" />
+    <link rel="stylesheet" href="../shared/normalize.css" />
+    <link rel="stylesheet" href="../shared/additional.css" />
+    <link rel="stylesheet" href="register.css" />
+  </head>
+  <body>
+    <div class="login-screen flex">
+      <div class="login-mangools">
+        <div class="login-mangools__bg--small relative flex flex-col items-center">
+          <div class="login-mangools__logo">
+            <img src="img/logo.png" style="height: 2.25rem" alt="Logo" />
+          </div>
+          <h2>Register here</h2>
+          <div class="login-mangools__card">
+            <form id="registerForm" class="flex flex-col">
+              <div class="flex flex-col card__list">
+                <span class="card__label">Your email</span>
+                <label class="relative">
+                  <input id="email" class="card__input" type="email" placeholder="eg. elonmusk@gmail.com" required />
+                </label>
+              </div>
+              <div class="flex flex-col card__list">
+                <span class="card__label">Phone Number</span>
+                <label class="relative">
+                  <input id="phone" class="card__input" type="tel" placeholder="eg. +1234567890" required />
+                </label>
+              </div>
+              <div class="flex flex-col card__list">
+                <span class="card__label">Password</span>
+                <label class="relative">
+                  <input id="password" class="card__input" type="password" placeholder="eg. iloveyoutoo" required />
+                </label>
+              </div>
+              <button id="submitBtn" class="card__sign-in" type="submit">Sign Up</button>
+              <div class="flex justify-evenly">
+                <a href="login.html" class="card__url">Already have an account?</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript to handle form submission via fetch API
+      document.getElementById("registerForm").addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Collect form data
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const password = document.getElementById("password").value;
+
+        // Create a subscriber object
+        const subscriber = {
+          email: email,
+          phone: phone,
+          password: password
+        };
+
+        try {
+          // Send the subscriber data to the backend API
+          const response = await fetch("http://localhost:8080/api/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(subscriber),
+          });
+
+          // Handle the response
+          if (response.ok) {
+            const result = await response.json();
+            alert("Registration successful!"); // Show success message
+            // Optionally, redirect to another page
+            window.location.href = "login.html"; 
+          } else {
+            const error = await response.text();
+            alert("Registration failed: " + error); // Show error message
+          }
+        } catch (error) {
+          console.error("Error during registration:", error);
+          alert("An error occurred during registration.");
+        }
+      });
+    </script>
+  </body>
+</html>
